@@ -1,10 +1,12 @@
-﻿namespace TurtleGame.Models
+﻿namespace TurtleGame.Services
 {
     using System;
 
+    using TurtleGame.Models;
     using TurtleGame.Output;
+    using TurtleGame.Services.Enums;
 
-    public class Game
+    public class GameService
     {
         private readonly Board board;
 
@@ -12,15 +14,15 @@
 
         private readonly Mines mines;
 
-        private readonly Turtle turtle;
-
         private readonly IOutput output;
+
+        private readonly Turtle turtle;
 
         private int actionNumber;
 
         private GameAction lastAction;
 
-        public Game(Board board, Mines mines, Exit exit, Turtle turtle, IOutput output)
+        public GameService(Board board, Mines mines, Exit exit, Turtle turtle, IOutput output)
         {
             this.board = board;
             this.mines = mines;
@@ -29,24 +31,6 @@
             this.output = output;
             this.Status = GameStatus.Playing;
             this.actionNumber = 0;
-        }
-
-        public enum GameAction
-        {
-            Rotate,
-
-            Move
-        }
-
-        public enum GameStatus
-        {
-            Playing = 0,
-
-            Success = 2,
-
-            MineHit = 3,
-
-            HitWall = 4
         }
 
         public GameStatus Status { get; set; }
@@ -93,7 +77,8 @@
             }
             else
             {
-                this.output.WriteLine(this.lastAction == GameAction.Rotate
+                this.output.WriteLine(
+                    this.lastAction == GameAction.Rotate
                         ? $"The turtle was point to {this.turtle.LastDirection} and rotated to {this.turtle.Direction}."
                         : $"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y}.");
             }

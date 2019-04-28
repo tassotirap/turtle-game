@@ -6,21 +6,22 @@
     using Newtonsoft.Json;
 
     using TurtleGame.FileModels;
-    using TurtleGame.Models;
     using TurtleGame.Output;
+    using TurtleGame.Services;
+    using TurtleGame.Services.Enums;
 
     public class Program
     {
         public static void Main(string[] args)
         {
             var configFile = GetConfigFile(args);
-            var game = new Game(configFile.Board, configFile.Mines, configFile.Exit, configFile.Turtle, new ConsoleOutput());
+            var game = new GameService(configFile.Board, configFile.Mines, configFile.Exit, configFile.Turtle, new ConsoleOutput());
 
             var movements = GetMovementFile(args);
             foreach (var movement in movements.Movements)
             {
                 game.Action(movement);
-                if (game.Status != Game.GameStatus.Playing)
+                if (game.Status != GameStatus.Playing)
                 {
                     break;
                 }
