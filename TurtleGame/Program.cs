@@ -1,17 +1,20 @@
 ﻿namespace TurtleGame
 {
-    using Newtonsoft.Json;
     using System;
     using System.IO;
+
+    using Newtonsoft.Json;
+
     using TurtleGame.FileModels;
     using TurtleGame.Models;
+    using TurtleGame.Output;
 
     public class Program
     {
         public static void Main(string[] args)
         {
             var configFile = GetConfigFile(args);
-            var game = new Game(configFile.Board, configFile.Mines, configFile.Exit, configFile.Turtle);
+            var game = new Game(configFile.Board, configFile.Mines, configFile.Exit, configFile.Turtle, new ConsoleOutput());
 
             var movements = GetMovementFile(args);
             foreach (var movement in movements.Movements)

@@ -2,6 +2,8 @@
 {
     using System;
 
+    using TurtleGame.Output;
+
     public class Game
     {
         private readonly Board board;
@@ -12,16 +14,19 @@
 
         private readonly Turtle turtle;
 
+        private readonly IOutput output;
+
         private int actionNumber;
 
         private GameAction lastAction;
 
-        public Game(Board board, Mines mines, Exit exit, Turtle turtle)
+        public Game(Board board, Mines mines, Exit exit, Turtle turtle, IOutput output)
         {
             this.board = board;
             this.mines = mines;
             this.exit = exit;
             this.turtle = turtle;
+            this.output = output;
             this.Status = GameStatus.Playing;
             this.actionNumber = 0;
         }
@@ -48,7 +53,7 @@
 
         public void Action(GameAction action)
         {
-            Console.WriteLine(this.turtle);
+            this.output.WriteLine(this.turtle);
 
             this.actionNumber++;
             this.lastAction = action;
@@ -67,34 +72,34 @@
 
         private void UpdateStatus()
         {
-            Console.Write($"Action {this.actionNumber} -> ");
-            Console.ForegroundColor = this.lastAction == GameAction.Rotate ? ConsoleColor.Yellow : ConsoleColor.Cyan;
-            Console.WriteLine(this.lastAction);
+            this.output.Write($"Action {this.actionNumber} -> ");
+            this.output.SetColor(this.lastAction == GameAction.Rotate ? ConsoleColor.Yellow : ConsoleColor.Cyan);
+            this.output.WriteLine(this.lastAction);
 
             if (this.turtle.IsOver(this.exit))
             {
                 this.Status = GameStatus.Success;
-                Console.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and found the exit!");
+                this.output.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and found the exit!");
             }
             else if (this.mines.IsOver(this.turtle))
             {
                 this.Status = GameStatus.MineHit;
-                Console.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and trigged a mine!");
+                this.output.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and trigged a mine!");
             }
             else if (this.board.LeftMap(this.turtle))
             {
                 this.Status = GameStatus.HitWall;
-                Console.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and hitted a wall!");
+                this.output.WriteLine($"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y} and hitted a wall!");
             }
             else
             {
-                Console.WriteLine(this.lastAction == GameAction.Rotate
+                this.output.WriteLine(this.lastAction == GameAction.Rotate
                         ? $"The turtle was point to {this.turtle.LastDirection} and rotated to {this.turtle.Direction}."
                         : $"The turtle moved from {this.turtle.LastX}-{this.turtle.LastY} to {this.turtle.X}-{this.turtle.Y}.");
             }
 
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.White;
+            this.output.WriteLine();
+            this.output.SetColor(ConsoleColor.Gray);
         }
     }
 }
