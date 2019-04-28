@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "TurtleGame-Success": {
+      "commandName": "Project",
+      "commandLineArgs": "Config Success"
+    },
+    "TurtleGame-MineHit": {
+      "commandName": "Project",
+      "commandLineArgs": "Config MineHit"
+    },
+    "TurtleGame-StillDanger": {
+      "commandName": "Project",
+      "commandLineArgs": "Config StillDanger"
+    }
+  }
+}
